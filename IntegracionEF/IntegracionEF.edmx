@@ -1,0 +1,389 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MODELO_DATOS_UAMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CARRERAS">
+          <Key>
+            <PropertyRef Name="ID_CARRERA" />
+          </Key>
+          <Property Name="ID_CARRERA" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DESC_CARRERA" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CURSOS">
+          <Key>
+            <PropertyRef Name="ID_CURSO" />
+          </Key>
+          <Property Name="ID_CURSO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DESC_CURSO" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ID_CARRERA" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CURSOS_PROFES">
+          <Key>
+            <PropertyRef Name="ID_CURSO_PROFE" />
+          </Key>
+          <Property Name="ID_CURSO_PROFE" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_CURSO" Type="int" Nullable="false" />
+          <Property Name="ID_PROFESOR" Type="int" Nullable="false" />
+          <Property Name="ESTADO" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ESTUDIANTES">
+          <Key>
+            <PropertyRef Name="ID_ESTUDIANTE" />
+          </Key>
+          <Property Name="ID_ESTUDIANTE" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDENTIFICACION_EST" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="NOMBRE_COMPLETO" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="EDAD" Type="int" />
+          <Property Name="GENERO" Type="varchar" MaxLength="1" />
+          <Property Name="ESTADO" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NOTAS_ESTUDIANTES">
+          <Key>
+            <PropertyRef Name="ID_NOTA_ESTUDIANTE" />
+          </Key>
+          <Property Name="ID_NOTA_ESTUDIANTE" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_ESTUDIANTE" Type="int" Nullable="false" />
+          <Property Name="ID_CURSO" Type="int" Nullable="false" />
+          <Property Name="NOTA" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PROFESORES">
+          <Key>
+            <PropertyRef Name="ID_PROFESOR" />
+          </Key>
+          <Property Name="ID_PROFESOR" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDENTIFICACION_PROF" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="NOMBRE_COMPLETO" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_CURSOS">
+          <End Role="CARRERAS" Type="Self.CARRERAS" Multiplicity="1" />
+          <End Role="CURSOS" Type="Self.CURSOS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CARRERAS">
+              <PropertyRef Name="ID_CARRERA" />
+            </Principal>
+            <Dependent Role="CURSOS">
+              <PropertyRef Name="ID_CARRERA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CURSOS_PROFES_I">
+          <End Role="PROFESORES" Type="Self.PROFESORES" Multiplicity="1" />
+          <End Role="CURSOS_PROFES" Type="Self.CURSOS_PROFES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PROFESORES">
+              <PropertyRef Name="ID_PROFESOR" />
+            </Principal>
+            <Dependent Role="CURSOS_PROFES">
+              <PropertyRef Name="ID_PROFESOR" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CURSOS_PROFES_II">
+          <End Role="CURSOS" Type="Self.CURSOS" Multiplicity="1" />
+          <End Role="CURSOS_PROFES" Type="Self.CURSOS_PROFES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CURSOS">
+              <PropertyRef Name="ID_CURSO" />
+            </Principal>
+            <Dependent Role="CURSOS_PROFES">
+              <PropertyRef Name="ID_CURSO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NOTAS_ESTUDIANTES_I">
+          <End Role="ESTUDIANTES" Type="Self.ESTUDIANTES" Multiplicity="1" />
+          <End Role="NOTAS_ESTUDIANTES" Type="Self.NOTAS_ESTUDIANTES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ESTUDIANTES">
+              <PropertyRef Name="ID_ESTUDIANTE" />
+            </Principal>
+            <Dependent Role="NOTAS_ESTUDIANTES">
+              <PropertyRef Name="ID_ESTUDIANTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NOTAS_ESTUDIANTES_II">
+          <End Role="CURSOS" Type="Self.CURSOS" Multiplicity="1" />
+          <End Role="NOTAS_ESTUDIANTES" Type="Self.NOTAS_ESTUDIANTES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CURSOS">
+              <PropertyRef Name="ID_CURSO" />
+            </Principal>
+            <Dependent Role="NOTAS_ESTUDIANTES">
+              <PropertyRef Name="ID_CURSO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MODELO_DATOS_UAMModelStoreContainer">
+          <EntitySet Name="CARRERAS" EntityType="Self.CARRERAS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CURSOS" EntityType="Self.CURSOS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CURSOS_PROFES" EntityType="Self.CURSOS_PROFES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ESTUDIANTES" EntityType="Self.ESTUDIANTES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NOTAS_ESTUDIANTES" EntityType="Self.NOTAS_ESTUDIANTES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PROFESORES" EntityType="Self.PROFESORES" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CURSOS" Association="Self.FK_CURSOS">
+            <End Role="CARRERAS" EntitySet="CARRERAS" />
+            <End Role="CURSOS" EntitySet="CURSOS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CURSOS_PROFES_I" Association="Self.FK_CURSOS_PROFES_I">
+            <End Role="PROFESORES" EntitySet="PROFESORES" />
+            <End Role="CURSOS_PROFES" EntitySet="CURSOS_PROFES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CURSOS_PROFES_II" Association="Self.FK_CURSOS_PROFES_II">
+            <End Role="CURSOS" EntitySet="CURSOS" />
+            <End Role="CURSOS_PROFES" EntitySet="CURSOS_PROFES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NOTAS_ESTUDIANTES_I" Association="Self.FK_NOTAS_ESTUDIANTES_I">
+            <End Role="ESTUDIANTES" EntitySet="ESTUDIANTES" />
+            <End Role="NOTAS_ESTUDIANTES" EntitySet="NOTAS_ESTUDIANTES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NOTAS_ESTUDIANTES_II" Association="Self.FK_NOTAS_ESTUDIANTES_II">
+            <End Role="CURSOS" EntitySet="CURSOS" />
+            <End Role="NOTAS_ESTUDIANTES" EntitySet="NOTAS_ESTUDIANTES" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MODELO_DATOS_UAMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CARRERAS">
+          <Key>
+            <PropertyRef Name="ID_CARRERA" />
+          </Key>
+          <Property Name="ID_CARRERA" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DESC_CARRERA" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="CURSOS" Relationship="Self.FK_CURSOS" FromRole="CARRERAS" ToRole="CURSOS" />
+        </EntityType>
+        <EntityType Name="CURSOS">
+          <Key>
+            <PropertyRef Name="ID_CURSO" />
+          </Key>
+          <Property Name="ID_CURSO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DESC_CURSO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ID_CARRERA" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CARRERAS" Relationship="Self.FK_CURSOS" FromRole="CURSOS" ToRole="CARRERAS" />
+          <NavigationProperty Name="CURSOS_PROFES" Relationship="Self.FK_CURSOS_PROFES_II" FromRole="CURSOS" ToRole="CURSOS_PROFES" />
+          <NavigationProperty Name="NOTAS_ESTUDIANTES" Relationship="Self.FK_NOTAS_ESTUDIANTES_II" FromRole="CURSOS" ToRole="NOTAS_ESTUDIANTES" />
+        </EntityType>
+        <EntityType Name="CURSOS_PROFES">
+          <Key>
+            <PropertyRef Name="ID_CURSO_PROFE" />
+          </Key>
+          <Property Name="ID_CURSO_PROFE" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_CURSO" Type="Int32" Nullable="false" />
+          <Property Name="ID_PROFESOR" Type="Int32" Nullable="false" />
+          <Property Name="ESTADO" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="CURSOS" Relationship="Self.FK_CURSOS_PROFES_II" FromRole="CURSOS_PROFES" ToRole="CURSOS" />
+          <NavigationProperty Name="PROFESORES" Relationship="MODELO_DATOS_UAMModel.FK_CURSOS_PROFES_I" FromRole="CURSOS_PROFES" ToRole="PROFESORES" />
+        </EntityType>
+        <EntityType Name="ESTUDIANTES">
+          <Key>
+            <PropertyRef Name="ID_ESTUDIANTE" />
+          </Key>
+          <Property Name="ID_ESTUDIANTE" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDENTIFICACION_EST" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NOMBRE_COMPLETO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EDAD" Type="Int32" />
+          <Property Name="GENERO" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="ESTADO" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="NOTAS_ESTUDIANTES" Relationship="Self.FK_NOTAS_ESTUDIANTES_I" FromRole="ESTUDIANTES" ToRole="NOTAS_ESTUDIANTES" />
+        </EntityType>
+        <EntityType Name="NOTAS_ESTUDIANTES">
+          <Key>
+            <PropertyRef Name="ID_NOTA_ESTUDIANTE" />
+          </Key>
+          <Property Name="ID_NOTA_ESTUDIANTE" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_ESTUDIANTE" Type="Int32" Nullable="false" />
+          <Property Name="ID_CURSO" Type="Int32" Nullable="false" />
+          <Property Name="NOTA" Type="Decimal" Precision="16" Scale="2" Nullable="false" />
+          <NavigationProperty Name="CURSOS" Relationship="Self.FK_NOTAS_ESTUDIANTES_II" FromRole="NOTAS_ESTUDIANTES" ToRole="CURSOS" />
+          <NavigationProperty Name="ESTUDIANTES" Relationship="Self.FK_NOTAS_ESTUDIANTES_I" FromRole="NOTAS_ESTUDIANTES" ToRole="ESTUDIANTES" />
+        </EntityType>
+        <Association Name="FK_CURSOS">
+          <End Role="CARRERAS" Type="Self.CARRERAS" Multiplicity="1" />
+          <End Role="CURSOS" Type="Self.CURSOS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CARRERAS">
+              <PropertyRef Name="ID_CARRERA" />
+            </Principal>
+            <Dependent Role="CURSOS">
+              <PropertyRef Name="ID_CARRERA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CURSOS_PROFES_II">
+          <End Role="CURSOS" Type="Self.CURSOS" Multiplicity="1" />
+          <End Role="CURSOS_PROFES" Type="Self.CURSOS_PROFES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CURSOS">
+              <PropertyRef Name="ID_CURSO" />
+            </Principal>
+            <Dependent Role="CURSOS_PROFES">
+              <PropertyRef Name="ID_CURSO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NOTAS_ESTUDIANTES_II">
+          <End Role="CURSOS" Type="Self.CURSOS" Multiplicity="1" />
+          <End Role="NOTAS_ESTUDIANTES" Type="Self.NOTAS_ESTUDIANTES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CURSOS">
+              <PropertyRef Name="ID_CURSO" />
+            </Principal>
+            <Dependent Role="NOTAS_ESTUDIANTES">
+              <PropertyRef Name="ID_CURSO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NOTAS_ESTUDIANTES_I">
+          <End Role="ESTUDIANTES" Type="Self.ESTUDIANTES" Multiplicity="1" />
+          <End Role="NOTAS_ESTUDIANTES" Type="Self.NOTAS_ESTUDIANTES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ESTUDIANTES">
+              <PropertyRef Name="ID_ESTUDIANTE" />
+            </Principal>
+            <Dependent Role="NOTAS_ESTUDIANTES">
+              <PropertyRef Name="ID_ESTUDIANTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MODELO_DATOS_UAMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CARRERAS" EntityType="Self.CARRERAS" />
+          <EntitySet Name="CURSOS" EntityType="Self.CURSOS" />
+          <EntitySet Name="CURSOS_PROFES" EntityType="Self.CURSOS_PROFES" />
+          <EntitySet Name="ESTUDIANTES" EntityType="Self.ESTUDIANTES" />
+          <EntitySet Name="NOTAS_ESTUDIANTES" EntityType="Self.NOTAS_ESTUDIANTES" />
+          <AssociationSet Name="FK_CURSOS" Association="Self.FK_CURSOS">
+            <End Role="CARRERAS" EntitySet="CARRERAS" />
+            <End Role="CURSOS" EntitySet="CURSOS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CURSOS_PROFES_II" Association="Self.FK_CURSOS_PROFES_II">
+            <End Role="CURSOS" EntitySet="CURSOS" />
+            <End Role="CURSOS_PROFES" EntitySet="CURSOS_PROFES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NOTAS_ESTUDIANTES_II" Association="Self.FK_NOTAS_ESTUDIANTES_II">
+            <End Role="CURSOS" EntitySet="CURSOS" />
+            <End Role="NOTAS_ESTUDIANTES" EntitySet="NOTAS_ESTUDIANTES" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NOTAS_ESTUDIANTES_I" Association="Self.FK_NOTAS_ESTUDIANTES_I">
+            <End Role="ESTUDIANTES" EntitySet="ESTUDIANTES" />
+            <End Role="NOTAS_ESTUDIANTES" EntitySet="NOTAS_ESTUDIANTES" />
+          </AssociationSet>
+          <EntitySet Name="PROFESORES" EntityType="MODELO_DATOS_UAMModel.PROFESORES" />
+          <AssociationSet Name="FK_CURSOS_PROFES_I" Association="MODELO_DATOS_UAMModel.FK_CURSOS_PROFES_I">
+            <End Role="PROFESORES" EntitySet="PROFESORES" />
+            <End Role="CURSOS_PROFES" EntitySet="CURSOS_PROFES" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="PROFESORES">
+          <Key>
+            <PropertyRef Name="ID_PROFESOR" />
+          </Key>
+          <Property Name="ID_PROFESOR" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDENTIFICACION_PROF" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="NOMBRE_COMPLETO" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CURSOS_PROFES" Relationship="MODELO_DATOS_UAMModel.FK_CURSOS_PROFES_I" FromRole="PROFESORES" ToRole="CURSOS_PROFES" />
+        </EntityType>
+        <Association Name="FK_CURSOS_PROFES_I">
+          <End Type="MODELO_DATOS_UAMModel.PROFESORES" Role="PROFESORES" Multiplicity="1" />
+          <End Type="MODELO_DATOS_UAMModel.CURSOS_PROFES" Role="CURSOS_PROFES" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PROFESORES">
+              <PropertyRef Name="ID_PROFESOR" />
+            </Principal>
+            <Dependent Role="CURSOS_PROFES">
+              <PropertyRef Name="ID_PROFESOR" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MODELO_DATOS_UAMModelStoreContainer" CdmEntityContainer="MODELO_DATOS_UAMEntities">
+          <EntitySetMapping Name="CARRERAS">
+            <EntityTypeMapping TypeName="MODELO_DATOS_UAMModel.CARRERAS">
+              <MappingFragment StoreEntitySet="CARRERAS">
+                <ScalarProperty Name="ID_CARRERA" ColumnName="ID_CARRERA" />
+                <ScalarProperty Name="DESC_CARRERA" ColumnName="DESC_CARRERA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CURSOS">
+            <EntityTypeMapping TypeName="MODELO_DATOS_UAMModel.CURSOS">
+              <MappingFragment StoreEntitySet="CURSOS">
+                <ScalarProperty Name="ID_CURSO" ColumnName="ID_CURSO" />
+                <ScalarProperty Name="DESC_CURSO" ColumnName="DESC_CURSO" />
+                <ScalarProperty Name="ID_CARRERA" ColumnName="ID_CARRERA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CURSOS_PROFES">
+            <EntityTypeMapping TypeName="MODELO_DATOS_UAMModel.CURSOS_PROFES">
+              <MappingFragment StoreEntitySet="CURSOS_PROFES">
+                <ScalarProperty Name="ID_CURSO_PROFE" ColumnName="ID_CURSO_PROFE" />
+                <ScalarProperty Name="ID_CURSO" ColumnName="ID_CURSO" />
+                <ScalarProperty Name="ID_PROFESOR" ColumnName="ID_PROFESOR" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ESTUDIANTES">
+            <EntityTypeMapping TypeName="MODELO_DATOS_UAMModel.ESTUDIANTES">
+              <MappingFragment StoreEntitySet="ESTUDIANTES">
+                <ScalarProperty Name="ID_ESTUDIANTE" ColumnName="ID_ESTUDIANTE" />
+                <ScalarProperty Name="IDENTIFICACION_EST" ColumnName="IDENTIFICACION_EST" />
+                <ScalarProperty Name="NOMBRE_COMPLETO" ColumnName="NOMBRE_COMPLETO" />
+                <ScalarProperty Name="EDAD" ColumnName="EDAD" />
+                <ScalarProperty Name="GENERO" ColumnName="GENERO" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NOTAS_ESTUDIANTES">
+            <EntityTypeMapping TypeName="MODELO_DATOS_UAMModel.NOTAS_ESTUDIANTES">
+              <MappingFragment StoreEntitySet="NOTAS_ESTUDIANTES">
+                <ScalarProperty Name="ID_NOTA_ESTUDIANTE" ColumnName="ID_NOTA_ESTUDIANTE" />
+                <ScalarProperty Name="ID_ESTUDIANTE" ColumnName="ID_ESTUDIANTE" />
+                <ScalarProperty Name="ID_CURSO" ColumnName="ID_CURSO" />
+                <ScalarProperty Name="NOTA" ColumnName="NOTA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PROFESORES">
+            <EntityTypeMapping TypeName="MODELO_DATOS_UAMModel.PROFESORES">
+              <MappingFragment StoreEntitySet="PROFESORES">
+                <ScalarProperty Name="NOMBRE_COMPLETO" ColumnName="NOMBRE_COMPLETO" />
+                <ScalarProperty Name="IDENTIFICACION_PROF" ColumnName="IDENTIFICACION_PROF" />
+                <ScalarProperty Name="ID_PROFESOR" ColumnName="ID_PROFESOR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
